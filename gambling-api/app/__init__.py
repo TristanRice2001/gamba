@@ -17,7 +17,7 @@ hash_service = BcryptHashingService()
 db = SqliteDatabase("site.db")
 
 
-def create_app(environ=None, start_response=None, is_test=False):
+def create_app(is_test=False):
     from app.models import User
 
     app = Flask(__name__)
