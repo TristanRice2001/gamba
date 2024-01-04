@@ -7,18 +7,23 @@ from peewee import SqliteDatabase
 from app.services.recaptcha import RecaptchaService
 from app.services.user import UserService
 from app.services.jwt_service import JWTService
+from app.services.authentication_service import JWTBasicAuthenticationService
+from app.models import create_user_model, create_listing_model
 from app.services.hashing_service import BcryptHashingService
 
 recaptcha_service = RecaptchaService()
 user_service = UserService()
 jwt_service = JWTService()
 hash_service = BcryptHashingService()
+authentication_service = JWTBasicAuthenticationService(
+    user_service, 
+    jwt_service)
 
 db = SqliteDatabase("site.db")
-
+User = create_user_model(db)
+Listing = create_listing_model(db)
 
 def create_app(is_test=False):
-    from app.models import User
 
     app = Flask(__name__)
 

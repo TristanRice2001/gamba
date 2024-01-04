@@ -1,14 +1,11 @@
-from app import db
-from peewee import Model, CharField
+from peewee import Model, CharField, BooleanField
 
 
-class User(Model):
+class UserModel(Model):
     username = CharField(unique=True)
     email = CharField(unique=True)
+    is_admin = BooleanField(default=False) 
     password = CharField()
-
-    class Meta:
-        database = db
 
     def to_dict(self):
         return {
@@ -16,3 +13,11 @@ class User(Model):
             "username": self.username,
             "email": self.email
         }
+
+def create_user_model(db):
+    class UserWithMeta(UserModel):
+
+        class Meta:
+            database = db
+
+    return UserWithMeta

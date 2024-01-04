@@ -1,5 +1,6 @@
 import unittest
 from app.services.jwt_service import JWTService, IJWTService
+from .execptions import InvalidTokenException, InvalidSignatureException, ExpiredTokenError
 from base64 import b64decode
 
 
@@ -51,6 +52,38 @@ class TestJwtService(unittest.TestCase):
         self.assertRaises(expected,
                           lambda: self.jwt_service.encode_payload(data))
 
+    def test_when_invalid_token_then_raise_error(self):
+        data = "aaa"
+        expected = InvalidTokenException
+
+        self.assertRaises(expected,
+                          lambda: self.jwt_service.decode_payload(data))
+        
+    
+    def test_when_invalid_signature_then_raise_error(self):
+        # Test data with the jWT secret 'invalid_secret'
+        data = """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXN0IjoidGVzdCIsImlhdCI6MTcwNDM4MzU2M30.T3T28FeOCuElOvbkxSslftm_QZ37rpnPZpFrm4q_tp4"""
+        expected = InvalidSignatureException
+
+        self.assertRaises(expected,
+                          lambda: self.jwt_service.decode_payload(data))
+
+    def test_when_expired_token_then_raise_error(self):
+        # Token with the exp attribute set to 100
+        data = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0ZXN0IjoidGVzdCIsImV4cCI6MTAwfQ.hNLYytHDdn-9N5ytTuZYErlp6z9Yblhkl_ibvPje3YU"
+        expected = ExpiredTokenError
+
+        self.assertRaises(expected,
+                          lambda: self.jwt_service.decode_payload(data))
+
+    def test_when_valid_token_return_valid_response(self):
+        data = {"test": "test"}
+        jwt_token = self.jwt_service.encode_payload(data, add_expiration=False)
+
+        decoded = self.jwt_service.decode_payload(jwt_token)
+
+        self.assertEqual(data, decoded)
+    
 
 if __name__ == "__main__":
     unittest.main()

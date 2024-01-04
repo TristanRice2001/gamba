@@ -14,6 +14,9 @@ class TestJwtService(unittest.TestCase):
         from app import create_app
         self.test_token = "test_token"
         self.app = create_app()
+        self.app.config.update({
+            "IGNORE_RECAPTCHA": False
+        })
         self.recaptcha_valid_service = RecaptchaService()
         self.recaptcha_valid_service.init_app(self.app)
 

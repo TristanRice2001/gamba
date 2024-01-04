@@ -2,7 +2,7 @@ import copy
 import unittest
 from unittest.mock import MagicMock, patch
 from app.services.recaptcha import IRecaptchaService, RecaptchaService
-from app.models import User
+from app.models import create_user_model
 from peewee import SqliteDatabase
 from app.services.user import UserService
 from app.services.jwt_service import JWTService
@@ -10,6 +10,7 @@ from app.services.hashing_service import BcryptHashingService
 from .controllers import AuthController
 from .dto import LoginRequest, RegisterRequest
 
+User = create_user_model(None)
 
 def get_error_message(response: dict, key=""):
     err_value = (response.get("error", {}).get(key)) or None

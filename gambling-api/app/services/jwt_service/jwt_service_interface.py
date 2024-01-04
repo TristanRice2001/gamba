@@ -10,3 +10,7 @@ class IJWTService(ABC):
     @abstractmethod
     def encode_payload(self, payload: dict, add_expiration: bool = True) -> str:
         pass
+
+    @abstractmethod
+    def decode_payload(self, jwt_token: str) -> dict:
+        pass

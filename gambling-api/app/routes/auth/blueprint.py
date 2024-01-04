@@ -1,8 +1,10 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from .controllers import AuthController
 from .dto import RegisterRequest, RegisterRequestValidator, LoginRequest, LoginRequestValidator
-from app import recaptcha_service, user_service, jwt_service, hash_service
-from app.helpers import marshal_request
+from app import recaptcha_service, user_service, jwt_service, hash_service, authentication_service
+from app.lib import marshal_request, authenticate_route
+from flask import request
+from app.models import UserModel
 
 
 def make_controller() -> AuthController:
@@ -30,3 +32,8 @@ def register(request_dto: RegisterRequest):
 def login(request_dto: LoginRequest):
     controller = make_controller()
     return jsonify(controller.login_post(request_dto))
+
+@bp.route("/me", methods=["GET"])
+@authenticate_route(authentication_service)
+def me(user: UserModel):
+    return jsonify(user.to_dict())

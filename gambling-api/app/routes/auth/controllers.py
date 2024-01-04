@@ -2,7 +2,7 @@ from app.services.recaptcha import IRecaptchaService
 from app.services.user import IUserService
 from app.services.jwt_service import IJWTService
 from .dto import RegisterRequest, LoginRequest
-from app.helpers import make_error_response
+from app.lib import make_error_response
 from app.services.hashing_service import IHashingService
 
 
