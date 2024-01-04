@@ -1,6 +1,7 @@
 import unittest
 from app.services.jwt_service import JWTService, IJWTService
-from .execptions import InvalidTokenException, InvalidSignatureException, ExpiredTokenError
+from app.services.jwt_service.execptions import InvalidTokenException, InvalidSignatureException, ExpiredTokenError
+# from .execptions import InvalidTokenException, InvalidSignatureException, ExpiredTokenError
 from base64 import b64decode
 
 
